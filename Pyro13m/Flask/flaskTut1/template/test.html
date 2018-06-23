@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Sign In</title>
+</head>
+<body>
+	FILL IT AND GET IN!
+	<form action="{{ url_for('login') }}" method="post">
+	    NAME: <input type="text" name="name"><br>
+	   	PASSWORD: <input type="password" name="password"><br>
+	    <input type="submit" value="LOG IN">
+	</form>
+</body>
+</html>

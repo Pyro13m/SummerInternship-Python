@@ -1,43 +1,45 @@
 import requests
 from bs4 import BeautifulSoup
-import re
-import configparser
+import urllib
+import ConfigParser
+import urllib3
+
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Read username and password from config file
 
-configFile = "/home/priyom/webscrapping/config.txt"
-config = configparser.ConfigParser()
+configFile = "/home/hridoy/Work/youlikehits-scraper/config.txt"
+config = ConfigParser.ConfigParser()
 config.readfp(open(configFile))
 
 # Fill in your details here to be posted to the login form.
-
 datas = {
     'username': config.get('Credentials', 'username'),
     'pass': config.get('Credentials', 'password')
 }
+content = None
+
+print "****** YOULIKEHITS PARSER WORKING ******"
 
 
-print("****** YOULIKEHITS PARSER WORKING ******")
-
+# Use 'with' to ensure the session context is closed after use.
 
 with requests.Session() as s:
-    
-	p = s.post('<URL>', data=datas, verify=False)
+    # login to youlikehits using payload parameters
+        p = s.post('https://youlikehits.com/login.php', data=datas, verify=False)
+        
+        PageContent = s.get("https://youlikehits.com/newaddtwitter.php" + str(count)).content
 
-	retweetPageContent = s.get("<URL>").content
-
-    # Find all iframes in the web page
-	soup = BeautifulSoup(retweetPageContent, 'html.parser')
-	tag = soup.find_all('iframe')
-
-
-    # Get URLs of retweets
-	URLs = []
-	for items in tag:
-		soup = BeautifulSoup(str(items), 'html.parser')
-		tag1 = soup.find_all('iframe')[0]
-		URLs.append(tag1['src'])
-
-print(URLs)
+      
+        # Find all iframes in the web page
+        soup = BeautifulSoup(PageContent, 'html.parser')
+        tag = soup.find_all('a')
 
 
+        # Get URLs of retweets
+        URLs = []
+        for items in tag:
+            soup = BeautifulSoup(str(items), 'html.parser')
+            tag1 = soup.find_all('a')[0]
+            URLs.append(tag1['href'])

@@ -1,0 +1,8 @@
+users = users.mongodb.users
+	check = users.find_one({'name': request.form['username'], 'password': request.form['password']})
+	if check == None:
+		return "User Doesn't Exist"	
+	else:
+		return (request.form['name'])
+		return render_template('template1.html')
+    
